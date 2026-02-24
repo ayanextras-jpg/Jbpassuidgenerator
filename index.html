@@ -1,64 +1,107 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>TEXT & RANDOM Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEXT & RANDOM Generator</title>
 
-    <!-- PWA META -->
-    <meta name="theme-color" content="#4CAF50">
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+<!-- PWA META -->
+<meta name="theme-color" content="#4CAF50">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f4f6f9;
+}
 
-        .row {
-            margin-bottom: 10px;
-        }
+h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
 
-        input {
-            padding: 6px;
-            margin-right: 5px;
-        }
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-bottom: 25px;
+}
 
-        button {
-            padding: 6px 12px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
+h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
 
-        textarea {
-            margin-top: 10px;
-            width: 250px;
-            height: 100px;
-            resize: none;
-            overflow-y: auto;
-            white-space: pre;
-        }
+.row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 15px;
+}
 
-        .section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #ccc;
-        }
+input {
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+}
 
-        .copied-text {
-            margin-left: 10px;
-            color: green;
-            font-weight: bold;
-            display: none;
-        }
+button {
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    width: 100%;
+    margin-bottom: 10px;
+}
 
-        #installBtn {
-            margin-top: 20px;
-            display: none;
-        }
-    </style>
+button:active {
+    opacity: 0.8;
+}
+
+textarea {
+    width: 100%;
+    height: 180px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+.copied-text {
+    color: green;
+    font-weight: bold;
+    display: none;
+    margin-bottom: 10px;
+}
+
+#installBtn {
+    display: none;
+    background: #2196F3;
+}
+</style>
 </head>
+
 <body>
 
+<h1>TEXT & RANDOM Generator</h1>
+
+<div class="card">
 <h2>Pass Generator</h2>
 
 <div id="container">
@@ -68,32 +111,30 @@
     </div>
 </div>
 
-<button onclick="addRow()">+</button>
-<button onclick="generate()">Result</button>
+<button onclick="addRow()">+ Add Row</button>
+<button onclick="generate()">Generate</button>
 <button onclick="copyResult()">Copy</button>
-<span id="copyMsg1" class="copied-text">Copied!</span>
+<div id="copyMsg1" class="copied-text">Copied!</div>
 
-<br>
 <textarea id="resultBox" readonly></textarea>
-
-<div class="section">
-    <h2>UID Generator</h2>
-
-    <div class="row">
-        <input type="text" id="prefix" placeholder="Enter Prefix (ex: 1000)">
-        <input type="number" id="digitLength" placeholder="Random Digit Length (ex: 15)">
-        <input type="number" id="quantity" placeholder="How Many? (ex: 10)">
-    </div>
-
-    <button onclick="generateRandom()">Generate Random</button>
-    <button onclick="copyRandom()">Copy</button>
-    <span id="copyMsg2" class="copied-text">Copied!</span>
-
-    <br>
-    <textarea id="randomResult" readonly></textarea>
 </div>
 
-<!-- INSTALL BUTTON -->
+<div class="card">
+<h2>UID Generator</h2>
+
+<div class="row">
+    <input type="text" id="prefix" placeholder="Enter Prefix (ex: 1000)">
+    <input type="number" id="digitLength" placeholder="Random Digit Length (ex: 15)">
+    <input type="number" id="quantity" placeholder="How Many? (ex: 10)">
+</div>
+
+<button onclick="generateRandom()">Generate Random</button>
+<button onclick="copyRandom()">Copy</button>
+<div id="copyMsg2" class="copied-text">Copied!</div>
+
+<textarea id="randomResult" readonly></textarea>
+</div>
+
 <button id="installBtn">Install App</button>
 
 <script>
@@ -131,7 +172,7 @@ function copyResult() {
     var box = document.getElementById("resultBox");
     navigator.clipboard.writeText(box.value);
     var msg = document.getElementById("copyMsg1");
-    msg.style.display = "inline";
+    msg.style.display = "block";
     setTimeout(() => msg.style.display = "none", 1500);
 }
 
@@ -156,25 +197,25 @@ function copyRandom() {
     var box = document.getElementById("randomResult");
     navigator.clipboard.writeText(box.value);
     var msg = document.getElementById("copyMsg2");
-    msg.style.display = "inline";
+    msg.style.display = "block";
     setTimeout(() => msg.style.display = "none", 1500);
 }
 
-// SERVICE WORKER REGISTER
+// SERVICE WORKER
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js');
   });
 }
 
-// INSTALL BUTTON LOGIC
+// INSTALL BUTTON
 let deferredPrompt;
 const installBtn = document.getElementById("installBtn");
 
 window.addEventListener("beforeinstallprompt", (e) => {
   e.preventDefault();
   deferredPrompt = e;
-  installBtn.style.display = "inline-block";
+  installBtn.style.display = "block";
 });
 
 installBtn.addEventListener("click", async () => {
